@@ -6,3 +6,10 @@
 @theme {
   --font-mono: "JetBrains Mono", monospace;
 }
+
+@layer utilities {
+  .h-screen {
+    height: 100vh;
+    height: 100dvh;
+  }
+}
