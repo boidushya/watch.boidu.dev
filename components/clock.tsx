@@ -15,7 +15,7 @@ function Clock() {
 
   return (
     <NumberFlowGroup>
-      <h1 className="text-7xl md:text-9xl lg:text-[14rem] font-semibold font-mono tracking-tighter relative space-x-4 lg:space-x-12 ">
+      <h1 className="text-7xl md:text-9xl lg:text-[14rem] font-bold font-mono tracking-tighter relative space-x-4 lg:space-x-12 ">
         <NumberFlow value={hours} format={{ minimumIntegerDigits: 2 }} />
         <span className="text-zinc-900/30 dark:text-zinc-100/30 align-middle text-2xl lg:text-5xl mb-4 lg:mb-10 leading-none inline-block">
           ⨯

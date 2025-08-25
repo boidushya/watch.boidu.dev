@@ -1,5 +1,6 @@
 {
   "name": "watch.boidu.dev",
+  "description": "An opinionated beautiful standby clock",
   "private": true,
   "version": "1.0.0",
   "type": "module",
