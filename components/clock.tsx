@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 import { spinTimingOptions } from "@/utils/constants";
 import { cn, getOffset, pad } from "@/utils/helpers";
 import { useBreakpoint, useClock } from "@/utils/hooks";
-import { useFontStore, useDividerStore } from "@/utils/stores";
+import { useDividerStore, useFontStore } from "@/utils/stores";
 
 function Clock() {
   const { hours, minutes, seconds } = useClock();
@@ -23,8 +23,8 @@ function Clock() {
       return currentDivider.content;
     } else {
       return (
-        <img 
-          src={currentDivider.content} 
+        <img
+          src={currentDivider.content}
           alt={currentDivider.label}
           className="inline-block w-6 h-6 lg:w-12 lg:h-12 object-contain"
         />
@@ -36,7 +36,7 @@ function Clock() {
     <NumberFlowGroup>
       <h1
         className={cn(
-          "text-7xl md:text-9xl lg:text-[14rem] font-bold tracking-tighter relative space-x-4 lg:space-x-12",
+          "text-7xl md:text-9xl lg:text-[14rem] font-bold tracking-tighter relative space-x-4 lg:space-x-12 select-none",
           getTwVariant()
         )}
       >
