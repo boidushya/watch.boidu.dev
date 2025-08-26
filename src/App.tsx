@@ -17,7 +17,7 @@ function App() {
   return (
     <div className="h-screen bg-gradient-to-b dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 dark:text-zinc-100 transition-colors text-zinc-900 from-zinc-200 via-zinc-100 to-zinc-200">
       <header className="flex justify-between items-center absolute top-0 left-0 w-full p-6 opacity-50 hover:opacity-100 transition-opacity z-20">
-        <h1 className="text-2xl font-bold" role="button" onClick={handleClick}>
+        <h1 className="text-2xl font-bold cursor-pointer" role="button" onClick={handleClick}>
           <ClockIcon size={16} className="p-2" />
         </h1>
         <ThemeSwitcher />
