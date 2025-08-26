@@ -1,4 +1,4 @@
-import { useCommandMenuStore, useThemeStore, useFontStore, useDividerStore } from "@/utils/stores";
+import { useCommandMenuStore, useDividerStore, useFontStore, useThemeStore } from "@/utils/stores";
 import { CommandGroup, CommandItem } from "./primitives";
 
 const ACTION_ITEMS = [
@@ -23,7 +23,7 @@ const ACTION_ITEMS = [
     id: "view-source",
     label: "View source",
     action: "external",
-    url: "https://github.com/boidu/watch.boidu.dev",
+    url: "https://github.com/boidushya/watch.boidu.dev",
   },
 ] as const;
 
@@ -68,10 +68,7 @@ export function Actions() {
   return (
     <CommandGroup heading="Actions">
       {ACTION_ITEMS.map(item => (
-        <CommandItem
-          key={item.id}
-          onSelect={() => handleActionSelect(item)}
-        >
+        <CommandItem key={item.id} onSelect={() => handleActionSelect(item)}>
           {getItemLabel(item)}
         </CommandItem>
       ))}
