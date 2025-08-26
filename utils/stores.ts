@@ -78,10 +78,10 @@ interface DividerOption {
 }
 
 const DEFAULT_DIVIDERS: DividerOption[] = [
-  { id: "cross", label: "Cross (⨯)", type: "symbol", content: "⨯" },
-  { id: "colon", label: "Colon (:)", type: "symbol", content: ":" },
-  { id: "dot", label: "Dot (·)", type: "symbol", content: "·" },
-  { id: "pipe", label: "Pipe (|)", type: "symbol", content: "|" },
+  { id: "cross", label: "Cross", type: "symbol", content: "⨯" },
+  { id: "colon", label: "Colon", type: "symbol", content: ":" },
+  { id: "dot", label: "Dot", type: "symbol", content: "·" },
+  { id: "pipe", label: "Pipe", type: "symbol", content: "|" },
 ];
 
 interface DividerState {

@@ -25,7 +25,6 @@ export function DividersPage() {
 
   const validateSVG = (content: string): boolean => {
     try {
-      // Check if it's a valid SVG by trying to parse it
       const parser = new DOMParser();
       const doc = parser.parseFromString(content, "image/svg+xml");
       const parseError = doc.querySelector("parsererror");
@@ -34,7 +33,6 @@ export function DividersPage() {
         return false;
       }
 
-      // Check if it contains an SVG element
       return doc.querySelector("svg") !== null;
     } catch {
       return false;
@@ -57,7 +55,6 @@ export function DividersPage() {
         throw new Error("Invalid SVG content");
       }
 
-      // Convert SVG string to data URL
       const dataUrl = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgContent)))}`;
       addCustomDivider(label, dataUrl);
       setPasteStatus("success");
@@ -87,7 +84,6 @@ export function DividersPage() {
       reader.onload = async e => {
         const result = e.target?.result as string;
         if (result) {
-          // Extract SVG content from data URL
           const svgContent = result.startsWith("data:")
             ? decodeURIComponent(escape(atob(result.split(",")[1])))
             : result;
@@ -140,7 +136,7 @@ export function DividersPage() {
 
   const renderDividerPreview = (divider: ReturnType<typeof getAllDividers>[number]) => {
     if (divider.type === "symbol") {
-      return <span className="text-sm">{divider.content}</span>;
+      return <span className="text-sm text-zinc-400 dark:text-zinc-500">{divider.content}</span>;
     } else {
       return <img src={divider.content} alt={divider.label} className="w-4 h-4 object-contain" />;
     }

@@ -20,9 +20,9 @@ export function CommandDialog({ open, onOpenChange, children, className }: Comma
     >
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
       <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm md:max-w-lg">
-        <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden">
+        <Command className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden">
           {children}
-        </div>
+        </Command>
       </div>
     </Command.Dialog>
   );
@@ -51,11 +51,7 @@ interface CommandListProps {
 }
 
 export function CommandList({ children, className }: CommandListProps) {
-  return (
-    <Command.List className={cn("max-h-80 overflow-y-auto p-2", className)}>
-      {children}
-    </Command.List>
-  );
+  return <Command.List className={cn("max-h-80 overflow-y-auto p-2", className)}>{children}</Command.List>;
 }
 
 interface CommandEmptyProps {
@@ -102,7 +98,7 @@ export function CommandItem({ children, onSelect, className }: CommandItemProps)
     <Command.Item
       onSelect={onSelect}
       className={cn(
-        "dark:text-zinc-100 text-zinc-900 relative flex cursor-default select-none items-center rounded-md px-2 py-1.5 text-sm outline-none data-[selected='true']:bg-zinc-100 data-[selected='true']:text-zinc-900 dark:data-[selected='true']:bg-zinc-800 dark:data-[selected='true']:text-zinc-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "dark:text-zinc-400 text-zinc-600 relative flex cursor-pointer select-none items-center rounded-md px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-50 hover:text-zinc-900 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-50 data-[selected='true']:bg-zinc-100 data-[selected='true']:text-zinc-900 dark:data-[selected='true']:bg-zinc-800 dark:data-[selected='true']:text-zinc-50",
         className
       )}
     >

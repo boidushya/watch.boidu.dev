@@ -50,7 +50,7 @@ export function Actions() {
       return (
         <div className="flex items-center justify-between w-full">
           <span>{item.label}</span>
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">{font}</span>
+          <span className="text-xs text-zinc-400 dark:text-zinc-500">{font}</span>
         </div>
       );
     }
@@ -58,7 +58,7 @@ export function Actions() {
       return (
         <div className="flex items-center justify-between w-full">
           <span>{item.label}</span>
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">{currentDivider.label}</span>
+          <span className="text-xs text-zinc-400 dark:text-zinc-500">{currentDivider.label}</span>
         </div>
       );
     }
