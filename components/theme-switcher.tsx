@@ -1,21 +1,11 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
 import { MoonIcon } from "@/components/icons/moon";
 import { SunIcon } from "@/components/icons/sun";
 import { themeVariants } from "@/utils/constants";
+import { useThemeStore } from "@/utils/stores";
 
 export function ThemeSwitcher() {
-  const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const existingTheme = localStorage.getItem("theme") as "light" | "dark";
-
-  const [theme, setTheme] = useState<"light" | "dark">(existingTheme || (systemTheme ? "dark" : "light"));
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-  };
+  const { theme, toggleTheme } = useThemeStore();
 
   return (
     <button

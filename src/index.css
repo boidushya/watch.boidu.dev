@@ -1,13 +1,25 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+@import url("https://api.fontshare.com/v2/css?f[]=general-sans@1&f[]=cabinet-grotesk@700&f[]=satoshi@1&display=swap");
 @import "tailwindcss";
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
-  --font-mono: "JetBrains Mono", monospace;
+  --font-jb-mono: "JetBrains Mono", monospace;
+  --font-geist-mono: "Geist Mono", monospace;
+  --font-inter: "Inter Display", sans-serif;
+  --font-general-sans: "General Sans", sans-serif;
+  --font-cabinet-grotesk: "Cabinet Grotesk", sans-serif;
+  --font-satoshi: "Satoshi", sans-serif;
 }
 
 @layer utilities {
+  html {
+    @apply dark:[color-scheme:dark];
+  }
+  body {
+    font-variant-numeric: tabular-nums;
+  }
   .h-screen {
     height: 100vh;
     height: 100dvh;

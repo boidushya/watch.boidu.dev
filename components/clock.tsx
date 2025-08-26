@@ -1,7 +1,9 @@
 import NumberFlow, { NumberFlowGroup } from "@number-flow/react";
 import { motion } from "motion/react";
+import { spinTimingOptions } from "@/utils/constants";
 import { cn, getOffset, pad } from "@/utils/helpers";
 import { useBreakpoint, useClock } from "@/utils/hooks";
+import { useFontStore, useDividerStore } from "@/utils/stores";
 
 function Clock() {
   const { hours, minutes, seconds } = useClock();
@@ -13,18 +15,45 @@ function Clock() {
 
   const offset = getOffset(breakpoint);
 
+  const { getTwVariant } = useFontStore();
+  const { currentDivider } = useDividerStore();
+
+  const renderDivider = () => {
+    if (currentDivider.type === "symbol") {
+      return currentDivider.content;
+    } else {
+      return (
+        <img 
+          src={currentDivider.content} 
+          alt={currentDivider.label}
+          className="inline-block w-6 h-6 lg:w-12 lg:h-12 object-contain"
+        />
+      );
+    }
+  };
+
   return (
     <NumberFlowGroup>
-      <h1 className="text-7xl md:text-9xl lg:text-[14rem] font-bold font-mono tracking-tighter relative space-x-4 lg:space-x-12 ">
-        <NumberFlow value={hours} format={{ minimumIntegerDigits: 2 }} />
+      <h1
+        className={cn(
+          "text-7xl md:text-9xl lg:text-[14rem] font-bold tracking-tighter relative space-x-4 lg:space-x-12",
+          getTwVariant()
+        )}
+      >
+        <NumberFlow value={hours} format={{ minimumIntegerDigits: 2 }} spinTiming={spinTimingOptions} />
         <span className="text-zinc-900/30 dark:text-zinc-100/30 align-middle text-2xl lg:text-5xl mb-4 lg:mb-10 leading-none inline-block">
-          ⨯
+          {renderDivider()}
         </span>
-        <NumberFlow value={minutes} digits={{ 1: { max: 5 } }} format={{ minimumIntegerDigits: 2 }} />
+        <NumberFlow
+          value={minutes}
+          digits={{ 1: { max: 5 } }}
+          format={{ minimumIntegerDigits: 2 }}
+          spinTiming={spinTimingOptions}
+        />
         <span className="text-zinc-900/30 dark:text-zinc-100/30 align-middle text-2xl lg:text-5xl mb-4 lg:mb-10 leading-none inline-block">
-          ⨯
+          {renderDivider()}
         </span>
-        <motion.div className="relative inline-flex flex-col items-center h-24 lg:h-48 gap-2">
+        <motion.div className="relative inline-flex flex-col items-center h-24 lg:h-48 gap-2 pr-1.5">
           {possibleSeconds.map(sec => {
             const diff = Math.abs(sec - seconds);
             const angleStep = Math.PI / 5;
@@ -44,9 +73,9 @@ function Clock() {
                 }}
                 transition={{
                   type: "spring",
-                  mass: 1,
-                  damping: 25,
-                  stiffness: 400,
+                  stiffness: 550,
+                  damping: 30,
+                  mass: 1.2,
                 }}
               >
                 {pad(sec)}
