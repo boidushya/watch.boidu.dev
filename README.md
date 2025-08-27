@@ -63,7 +63,7 @@ Add a font by updating `utils/config.ts`:
 ```
 
 > [!TIP]
-> Make sure you have added the font imports and custom tailwind classes in index.css
+> Make sure you've added the proper font imports and custom tailwind classes under `index.css`
 
 
 ### Backdrops  
