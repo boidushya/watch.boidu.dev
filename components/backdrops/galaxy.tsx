@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
+import { useThemeStore } from "@/utils/stores";
 
 function GalaxyBackdrop() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { theme } = useThemeStore();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -36,8 +38,8 @@ function GalaxyBackdrop() {
       const cy = height / 2;
 
       context.globalCompositeOperation = "lighter";
-      context.strokeStyle = "#ffffff33";
-      context.shadowColor = "#ffffff33";
+      context.strokeStyle = theme === "dark" ? "#ffffff33" : "#00000033";
+      context.shadowColor = theme === "dark" ? "#ffffff33" : "#00000033";
       context.lineWidth = 2;
       context.beginPath();
 
@@ -72,7 +74,7 @@ function GalaxyBackdrop() {
     };
 
     const step = () => {
-      time += velocity; // Constant rotation speed
+      time += velocity;
       clear();
       render();
       requestAnimationFrame(step);
@@ -85,7 +87,7 @@ function GalaxyBackdrop() {
     return () => {
       window.removeEventListener("resize", resize);
     };
-  }, []);
+  }, [theme]);
 
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-10" />;
 }

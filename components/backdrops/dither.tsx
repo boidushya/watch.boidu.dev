@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
+import { useThemeStore } from "@/utils/stores";
 
 function DitheringBackdrop() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { theme } = useThemeStore();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -55,8 +57,8 @@ function DitheringBackdrop() {
           grayscale = Math.pow(grayscale, 1.5);
 
           const threshold = bayerMatrix[y % 4][x % 4] / 16;
-          const value = grayscale > threshold ? 255 : 0;
-          const alpha = value === 255 ? 15 : 8;
+          const value = grayscale > threshold ? (theme === "dark" ? 255 : 0) : (theme === "dark" ? 0 : 255);
+          const alpha = value === (theme === "dark" ? 255 : 0) ? 15 : 8;
 
           data[i] = value;
           data[i + 1] = value;
@@ -82,7 +84,7 @@ function DitheringBackdrop() {
 
     window.addEventListener("resize", resizeCanvas);
     return () => window.removeEventListener("resize", resizeCanvas);
-  }, []);
+  }, [theme]);
 
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-10" />;
 }
