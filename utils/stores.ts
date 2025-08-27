@@ -1,7 +1,5 @@
 import { create } from "zustand";
-import BlurBackdrop from "@/components/backdrops/blur";
-import DitheringBackdrop from "@/components/backdrops/dither";
-import GalaxyBackdrop from "@/components/backdrops/galaxy";
+import { FONT_CONFIGS, type FontName, type BackdropId } from "./config";
 
 type Page = "main" | "typography" | "dividers" | "delete-dividers" | "backdrops";
 
@@ -54,7 +52,7 @@ export const useThemeStore = create<ThemeState>((set, get) => {
   };
 });
 
-type Font = "Jetbrains Mono" | "Inter Display" | "Geist Mono" | "General Sans" | "Cabinet Grotesk" | "Satoshi";
+type Font = FontName;
 
 interface FontState {
   font: Font;
@@ -70,13 +68,8 @@ export const useFontStore = create<FontState>((set, get) => ({
   },
   getTwVariant: () => {
     const font = get().font;
-    if (font === "Jetbrains Mono") return "font-jb-mono";
-    if (font === "Geist Mono") return "font-geist-mono";
-    if (font === "Inter Display") return "font-inter";
-    if (font === "General Sans") return "font-general-sans";
-    if (font === "Cabinet Grotesk") return "font-cabinet-grotesk";
-    if (font === "Satoshi") return "font-satoshi";
-    return "";
+    const config = FONT_CONFIGS.find(f => f.name === font);
+    return config?.twClass || "";
   },
 }));
 
@@ -144,25 +137,17 @@ export const useDividerStore = create<DividerState>((set, get) => ({
   getAllDividers: () => [...DEFAULT_DIVIDERS, ...get().customDividers],
 }));
 
-type Backdrop = "dither" | "galaxy" | "blur";
+type Backdrop = BackdropId;
 
 interface BackdropState {
   backdrop: Backdrop;
   setBackdrop: (backdrop: Backdrop) => void;
-  getBackdropComponent: () => React.ComponentType | null;
 }
 
-export const useBackdropStore = create<BackdropState>((set, get) => ({
+export const useBackdropStore = create<BackdropState>((set) => ({
   backdrop: (localStorage.getItem("backdrop") as Backdrop) || "dither",
   setBackdrop: backdrop => {
     localStorage.setItem("backdrop", backdrop);
     set({ backdrop });
-  },
-  getBackdropComponent: () => {
-    const backdrop = get().backdrop;
-    if (backdrop === "dither") return DitheringBackdrop;
-    if (backdrop === "galaxy") return GalaxyBackdrop;
-    if (backdrop === "blur") return BlurBackdrop;
-    return null;
   },
 }));

@@ -38,8 +38,8 @@ function GalaxyBackdrop() {
       const cy = height / 2;
 
       context.globalCompositeOperation = "lighter";
-      context.strokeStyle = theme === "dark" ? "#ffffff33" : "#00000033";
-      context.shadowColor = theme === "dark" ? "#ffffff33" : "#00000033";
+      context.strokeStyle = theme === "dark" ? "#ffffff2a" : "#0000002a";
+      context.shadowColor = theme === "dark" ? "#ffffff2a" : "#0000002a";
       context.lineWidth = 2;
       context.beginPath();
 

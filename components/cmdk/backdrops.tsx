@@ -1,11 +1,6 @@
 import { useBackdropStore, useCommandMenuStore } from "@/utils/stores";
 import { CommandGroup, CommandItem } from "./primitives";
-
-const BACKDROP_OPTIONS = [
-  { value: "dither", label: "Dithering" },
-  { value: "galaxy", label: "Galaxy" },
-  { value: "blur", label: "Blur" },
-] as const;
+import { BACKDROP_CONFIGS } from "@/utils/config";
 
 export function BackdropsPage() {
   const { backdrop, setBackdrop } = useBackdropStore();
@@ -18,11 +13,11 @@ export function BackdropsPage() {
 
   return (
     <CommandGroup heading="Select Backdrop">
-      {BACKDROP_OPTIONS.map(({ value, label }) => (
-        <CommandItem key={value} value={label} onSelect={() => handleBackdropSelect(value)}>
+      {BACKDROP_CONFIGS.map(({ id, name }) => (
+        <CommandItem key={id} value={name} onSelect={() => handleBackdropSelect(id)}>
           <span>
-            {label}
-            {backdrop === value ? " ✓" : ""}
+            {name}
+            {backdrop === id ? " ✓" : ""}
           </span>
         </CommandItem>
       ))}

@@ -5,13 +5,14 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import Weather from "@/components/weather";
 import { cn } from "@/utils/helpers";
 import { useBackdropStore, useCommandMenuStore, useFontStore } from "@/utils/stores";
+import { getBackdropComponent } from "@/utils/config";
 
 function App() {
   const { getTwVariant } = useFontStore();
   const { setOpen } = useCommandMenuStore();
-  const { getBackdropComponent } = useBackdropStore();
+  const { backdrop } = useBackdropStore();
 
-  const BackdropComponent = getBackdropComponent();
+  const BackdropComponent = getBackdropComponent(backdrop);
 
   const handleClick = () => {
     setOpen(true);

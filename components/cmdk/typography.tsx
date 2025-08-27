@@ -1,14 +1,6 @@
 import { useCommandMenuStore, useFontStore } from "@/utils/stores";
 import { CommandGroup, CommandItem } from "./primitives";
-
-const FONT_OPTIONS = [
-  { value: "Jetbrains Mono" },
-  { value: "Geist Mono" },
-  { value: "Inter Display" },
-  { value: "General Sans" },
-  { value: "Cabinet Grotesk" },
-  { value: "Satoshi" },
-] as const;
+import { FONT_CONFIGS } from "@/utils/config";
 
 export function TypographyPage() {
   const { font, setFont } = useFontStore();
@@ -21,11 +13,11 @@ export function TypographyPage() {
 
   return (
     <CommandGroup heading="Select Font">
-      {FONT_OPTIONS.map(({ value }) => (
-        <CommandItem key={value} value={value} onSelect={() => handleFontSelect(value)}>
+      {FONT_CONFIGS.map(({ name, displayName }) => (
+        <CommandItem key={name} value={displayName} onSelect={() => handleFontSelect(name)}>
           <span>
-            {value}
-            {font === value ? " ✓" : ""}
+            {displayName}
+            {font === name ? " ✓" : ""}
           </span>
         </CommandItem>
       ))}
