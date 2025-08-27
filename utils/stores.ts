@@ -1,4 +1,7 @@
 import { create } from "zustand";
+import BlurBackdrop from "@/components/backdrops/blur";
+import DitheringBackdrop from "@/components/backdrops/dither";
+import GalaxyBackdrop from "@/components/backdrops/galaxy";
 
 type Page = "main" | "typography" | "dividers" | "delete-dividers" | "backdrops";
 
@@ -141,17 +144,25 @@ export const useDividerStore = create<DividerState>((set, get) => ({
   getAllDividers: () => [...DEFAULT_DIVIDERS, ...get().customDividers],
 }));
 
-type Backdrop = "dither" | "galaxy";
+type Backdrop = "dither" | "galaxy" | "blur";
 
 interface BackdropState {
   backdrop: Backdrop;
   setBackdrop: (backdrop: Backdrop) => void;
+  getBackdropComponent: () => React.ComponentType | null;
 }
 
-export const useBackdropStore = create<BackdropState>(set => ({
+export const useBackdropStore = create<BackdropState>((set, get) => ({
   backdrop: (localStorage.getItem("backdrop") as Backdrop) || "dither",
   setBackdrop: backdrop => {
     localStorage.setItem("backdrop", backdrop);
     set({ backdrop });
+  },
+  getBackdropComponent: () => {
+    const backdrop = get().backdrop;
+    if (backdrop === "dither") return DitheringBackdrop;
+    if (backdrop === "galaxy") return GalaxyBackdrop;
+    if (backdrop === "blur") return BlurBackdrop;
+    return null;
   },
 }));

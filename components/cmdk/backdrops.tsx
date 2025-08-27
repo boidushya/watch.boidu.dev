@@ -1,9 +1,10 @@
-import { useCommandMenuStore, useBackdropStore } from "@/utils/stores";
+import { useBackdropStore, useCommandMenuStore } from "@/utils/stores";
 import { CommandGroup, CommandItem } from "./primitives";
 
 const BACKDROP_OPTIONS = [
   { value: "dither", label: "Dithering" },
   { value: "galaxy", label: "Galaxy" },
+  { value: "blur", label: "Blur" },
 ] as const;
 
 export function BackdropsPage() {
