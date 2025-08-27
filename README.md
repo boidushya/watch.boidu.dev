@@ -1,6 +1,10 @@
 # watch.boidu.dev
 
-An opinionated beautiful standby clock built with React and TypeScript.
+A beautifully crafted, opinionated standby clock.
+
+## Demo
+
+Visit [watch.boidu.dev](https://watch.boidu.dev) to see it in action.
 
 ## Features
 
@@ -40,6 +44,13 @@ An opinionated beautiful standby clock built with React and TypeScript.
 - `pnpm preview` - Preview production build
 - `pnpm lint` - Run ESLint
 
+## Configuration
+
+The project features a centralized theme system that allows easy customization:
+
+- **Backdrop effects** - Multiple animated background options
+- **Font selection** - Choose from various carefully selected typefaces
+
 ## Tech Stack
 
 - **React** - UI library
@@ -49,6 +60,16 @@ An opinionated beautiful standby clock built with React and TypeScript.
 - **Motion** - Animations
 - **TanStack Query** - Data fetching
 - **Number Flow** - Animated numbers
+
+## Deployment
+
+Build the project for production:
+
+```bash
+pnpm build
+```
+
+The built files will be in the `dist` directory, ready to deploy to any static hosting service.
 
 ## Adding Custom Elements
 
@@ -65,8 +86,7 @@ Add a font by updating `utils/config.ts`:
 > [!TIP]
 > Make sure you've added the proper font imports and custom tailwind classes under `index.css`
 
-
-### Backdrops  
+### Backdrops
 
 1. Create your component in `components/backdrops/`
 2. Add to config:
