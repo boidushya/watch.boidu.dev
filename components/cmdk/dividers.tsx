@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useRef, useState } from "react";
 import { CopyIcon } from "@/components/icons/copy";
+import { DeleteIcon } from "@/components/icons/delete";
 import { UploadIcon } from "@/components/icons/upload";
 import { cn } from "@/utils/helpers";
 import { useCommandMenuStore, useDividerStore } from "@/utils/stores";
@@ -8,7 +9,7 @@ import { CommandGroup, CommandItem } from "./primitives";
 
 export function DividersPage() {
   const { currentDivider, getAllDividers, setDivider, addCustomDivider } = useDividerStore();
-  const { setOpen } = useCommandMenuStore();
+  const { setOpen, setPage } = useCommandMenuStore();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [pasteStatus, setPasteStatus] = useState<"idle" | "processing" | "error" | "success">("idle");
@@ -150,7 +151,7 @@ export function DividersPage() {
         {allDividers
           .filter(d => d.type === "symbol")
           .map(divider => (
-            <CommandItem key={divider.id} onSelect={() => handleDividerSelect(divider)}>
+            <CommandItem key={divider.id} value={divider.label} onSelect={() => handleDividerSelect(divider)}>
               <div className="flex items-center justify-between w-full">
                 <span>{divider.label}</span>
                 <div className="flex items-center gap-2">
@@ -167,7 +168,7 @@ export function DividersPage() {
           {allDividers
             .filter(d => d.type === "custom")
             .map(divider => (
-              <CommandItem key={divider.id} onSelect={() => handleDividerSelect(divider)}>
+              <CommandItem key={divider.id} value={divider.label} onSelect={() => handleDividerSelect(divider)}>
                 <div className="flex items-center justify-between w-full">
                   <span>{divider.label}</span>
                   <div className="flex items-center gap-2">
@@ -181,11 +182,19 @@ export function DividersPage() {
       )}
 
       <CommandGroup heading="Upload">
-        <CommandItem onSelect={handleUploadClick} className="flex items-center justify-between w-full">
+        <CommandItem
+          value="Upload Custom SVG"
+          onSelect={handleUploadClick}
+          className="flex items-center justify-between w-full"
+        >
           <span>Upload Custom SVG</span>
           <UploadIcon size={12} />
         </CommandItem>
-        <CommandItem onSelect={handlePasteClick} className="flex items-center justify-between w-full">
+        <CommandItem
+          value="Paste Custom SVG"
+          onSelect={handlePasteClick}
+          className="flex items-center justify-between w-full"
+        >
           <AnimatePresence mode="wait" initial={false}>
             <motion.span
               key={pasteStatus}
@@ -208,7 +217,65 @@ export function DividersPage() {
         </CommandItem>
       </CommandGroup>
 
+      {allDividers.filter(d => d.type === "custom").length > 0 && (
+        <CommandGroup heading="Danger Zone">
+          <CommandItem
+            value="Delete Custom Dividers"
+            className="hover:dark:bg-red-500/30 hover:bg-red-400/30 text-red-400 dark:text-red-400 data-[selected='true']:bg-red-400/20 dark:data-[selected='true']:bg-red-400/20 data-[selected='true']:text-red-500 dark:data-[selected='true']:text-red-200"
+            onSelect={() => setPage("delete-dividers", "dividers")}
+          >
+            <span>Delete Custom Dividers</span>
+          </CommandItem>
+        </CommandGroup>
+      )}
+
       <input ref={fileInputRef} type="file" accept=".svg" onChange={handleFileChange} className="hidden" />
+    </>
+  );
+}
+
+export function DeleteDividersPage() {
+  const { customDividers, removeCustomDivider } = useDividerStore();
+  const { goBack } = useCommandMenuStore();
+
+  const handleDeleteDivider = (dividerId: string) => {
+    removeCustomDivider(dividerId);
+    goBack();
+  };
+
+  const renderDividerPreview = (divider: (typeof customDividers)[number]) => {
+    return <img src={divider.content} alt={divider.label} className="w-4 h-4 object-contain" />;
+  };
+
+  return (
+    <>
+      {customDividers.length === 0 ? (
+        <CommandGroup heading="No Custom Dividers">
+          <div className="px-2 py-4 text-center text-sm text-zinc-500 dark:text-zinc-400">
+            No custom dividers to delete
+          </div>
+        </CommandGroup>
+      ) : (
+        <CommandGroup heading="Select Divider to Delete">
+          {customDividers.map(divider => (
+            <CommandItem
+              key={divider.id}
+              value={`Delete ${divider.label}`}
+              onSelect={() => handleDeleteDivider(divider.id)}
+            >
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-2">
+                  {renderDividerPreview(divider)}
+                  <span>{divider.label}</span>
+                </div>
+                <span className="text-red-600 dark:text-red-400">
+                  <DeleteIcon size={14} />
+                </span>
+              </div>
+            </CommandItem>
+          ))}
+        </CommandGroup>
+      )}
     </>
   );
 }

@@ -91,11 +91,13 @@ interface CommandItemProps {
   children: ReactNode;
   onSelect?: () => void;
   className?: string;
+  value?: string;
 }
 
-export function CommandItem({ children, onSelect, className }: CommandItemProps) {
+export function CommandItem({ children, onSelect, className, value }: CommandItemProps) {
   return (
     <Command.Item
+      value={value}
       onSelect={onSelect}
       className={cn(
         "dark:text-zinc-400 text-zinc-600 relative flex cursor-pointer select-none items-center rounded-md px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-50 hover:text-zinc-900 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-50 data-[selected='true']:bg-zinc-100 data-[selected='true']:text-zinc-900 dark:data-[selected='true']:bg-zinc-800 dark:data-[selected='true']:text-zinc-50",

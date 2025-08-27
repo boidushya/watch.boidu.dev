@@ -1,7 +1,7 @@
 import type { Transition, Variants } from "motion/react";
 import { motion, useAnimation } from "motion/react";
 import type { HTMLAttributes } from "react";
-import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { cn } from "@/utils/helpers";
 
 export interface ClockIconHandle {
@@ -43,7 +43,7 @@ const minuteHandVariants: Variants = {
     originY: "100%",
   },
   animate: {
-    rotate: 45,
+    rotate: 180,
     originX: "0%",
     originY: "100%",
   },
@@ -53,6 +53,30 @@ const ClockIcon = forwardRef<ClockIconHandle, ClockIconProps>(
   ({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
     const controls = useAnimation();
     const isControlledRef = useRef(false);
+    const [time, setTime] = useState(new Date());
+
+    useEffect(() => {
+      const updateTime = () => setTime(new Date());
+      updateTime();
+      const interval = setInterval(updateTime, 1000);
+      return () => clearInterval(interval);
+    }, []);
+
+    const hours = time.getHours() % 12;
+    const minutes = time.getMinutes();
+
+    const hourAngle = hours * 30 + minutes * 0.5 - 90;
+    const minuteAngle = minutes * 6 - 90;
+
+    const centerX = 12;
+    const centerY = 12;
+    const hourRadius = 4;
+    const minuteRadius = 5.5;
+
+    const hourEndX = centerX + Math.cos((hourAngle * Math.PI) / 180) * hourRadius;
+    const hourEndY = centerY + Math.sin((hourAngle * Math.PI) / 180) * hourRadius;
+    const minuteEndX = centerX + Math.cos((minuteAngle * Math.PI) / 180) * minuteRadius;
+    const minuteEndY = centerY + Math.sin((minuteAngle * Math.PI) / 180) * minuteRadius;
 
     useImperativeHandle(ref, () => {
       isControlledRef.current = true;
@@ -100,24 +124,26 @@ const ClockIcon = forwardRef<ClockIconHandle, ClockIconProps>(
         >
           <circle cx="12" cy="12" r="10" />
           <motion.line
-            x1="12"
-            y1="12"
-            x2="12"
-            y2="6"
+            x1={centerX}
+            y1={centerY}
+            x2={hourEndX}
+            y2={hourEndY}
             variants={handVariants}
             animate={controls}
             initial="normal"
             transition={handTransition}
+            strokeWidth="2"
           />
           <motion.line
-            x1="12"
-            y1="12"
-            x2="16"
-            y2="12"
+            x1={centerX}
+            y1={centerY}
+            x2={minuteEndX}
+            y2={minuteEndY}
             variants={minuteHandVariants}
             animate={controls}
             initial="normal"
             transition={minuteHandTransition}
+            strokeWidth="2"
           />
         </svg>
       </div>

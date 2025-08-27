@@ -1,15 +1,17 @@
 import Clock from "@/components/clock";
 import CommandMenu from "@/components/cmdk";
-import DitheringBackdrop from "@/components/dithering-backdrop";
+import DitheringBackdrop from "@/components/backdrops/dither";
+import GalaxyBackdrop from "@/components/backdrops/galaxy";
 import { ClockIcon } from "@/components/icons/clock";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import Weather from "@/components/weather";
 import { cn } from "@/utils/helpers";
-import { useCommandMenuStore, useFontStore } from "@/utils/stores";
+import { useCommandMenuStore, useFontStore, useBackdropStore } from "@/utils/stores";
 
 function App() {
   const { getTwVariant } = useFontStore();
   const { setOpen } = useCommandMenuStore();
+  const { backdrop } = useBackdropStore();
   const handleClick = () => {
     setOpen(true);
   };
@@ -33,7 +35,8 @@ function App() {
         </a>
         <Weather />
       </footer>
-      <DitheringBackdrop />
+      {backdrop === "dither" && <DitheringBackdrop />}
+      {backdrop === "galaxy" && <GalaxyBackdrop />}
       <CommandMenu />
     </div>
   );

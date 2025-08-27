@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useCommandMenuStore } from "@/utils/stores";
 import { Actions } from "./cmdk/actions";
+import { BackdropsPage } from "./cmdk/backdrops";
+import { DeleteDividersPage, DividersPage } from "./cmdk/dividers";
 import { CommandDialog, CommandEmpty, CommandInput, CommandList } from "./cmdk/primitives";
 import { TypographyPage } from "./cmdk/typography";
-import { DividersPage } from "./cmdk/dividers";
 
 function CommandMenu() {
   const { open, setOpen, toggle, page, goBack } = useCommandMenuStore();
@@ -14,6 +15,14 @@ function CommandMenu() {
         e.preventDefault();
         toggle();
       } else if (e.key === "Backspace" && page !== "main") {
+        const activeElement = document.activeElement;
+        if (
+          activeElement &&
+          activeElement.attributes.getNamedItem("cmdk-input") === null &&
+          (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")
+        ) {
+          return;
+        }
         e.preventDefault();
         goBack();
       }
@@ -39,6 +48,8 @@ function CommandMenu() {
         {page === "main" && <Actions />}
         {page === "typography" && <TypographyPage />}
         {page === "dividers" && <DividersPage />}
+        {page === "backdrops" && <BackdropsPage />}
+        {page === "delete-dividers" && <DeleteDividersPage />}
       </CommandList>
     </CommandDialog>
   );

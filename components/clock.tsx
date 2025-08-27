@@ -9,8 +9,6 @@ function Clock() {
   const { hours, minutes, seconds } = useClock();
   const breakpoint = useBreakpoint();
 
-  console.log(breakpoint);
-
   const possibleSeconds = Array.from({ length: 60 }, (_, i) => i);
 
   const offset = getOffset(breakpoint);

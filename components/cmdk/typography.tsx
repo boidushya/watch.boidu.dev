@@ -22,7 +22,7 @@ export function TypographyPage() {
   return (
     <CommandGroup heading="Select Font">
       {FONT_OPTIONS.map(({ value }) => (
-        <CommandItem key={value} onSelect={() => handleFontSelect(value)}>
+        <CommandItem key={value} value={value} onSelect={() => handleFontSelect(value)}>
           <span>
             {value}
             {font === value ? " ✓" : ""}

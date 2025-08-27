@@ -1,23 +1,32 @@
 import { create } from "zustand";
 
-type Page = "main" | "typography" | "dividers";
+type Page = "main" | "typography" | "dividers" | "delete-dividers" | "backdrops";
 
 interface CommandMenuState {
   open: boolean;
   page: Page;
+  previousPage: Page | null;
   setOpen: (open: boolean) => void;
   toggle: () => void;
-  setPage: (page: Page) => void;
+  setPage: (page: Page, previous: Page) => void;
   goBack: () => void;
 }
 
-export const useCommandMenuStore = create<CommandMenuState>(set => ({
+export const useCommandMenuStore = create<CommandMenuState>((set, get) => ({
   open: false,
   page: "main",
+  previousPage: null,
   setOpen: open => set({ open }),
   toggle: () => set(state => ({ open: !state.open })),
-  setPage: page => set({ page }),
-  goBack: () => set({ page: "main" }),
+  setPage: (page, previous) => set({ page, previousPage: previous }),
+  goBack: () => {
+    const { previousPage } = get();
+    if (previousPage) {
+      set({ page: previousPage, previousPage: null });
+    } else {
+      set({ page: "main" });
+    }
+  },
 }));
 
 interface ThemeState {
@@ -74,7 +83,7 @@ interface DividerOption {
   id: string;
   label: string;
   type: DividerType;
-  content: string; // For symbols it's the character, for custom it's the SVG data URL
+  content: string;
 }
 
 const DEFAULT_DIVIDERS: DividerOption[] = [
@@ -89,6 +98,7 @@ interface DividerState {
   customDividers: DividerOption[];
   setDivider: (divider: DividerOption) => void;
   addCustomDivider: (label: string, svgDataUrl: string) => void;
+  removeCustomDivider: (id: string) => void;
   getAllDividers: () => DividerOption[];
 }
 
@@ -118,5 +128,30 @@ export const useDividerStore = create<DividerState>((set, get) => ({
     get().setDivider(newDivider);
   },
 
+  removeCustomDivider: id => {
+    const updatedCustom = get().customDividers.filter(divider => divider.id !== id);
+    localStorage.setItem("customDividers", JSON.stringify(updatedCustom));
+    set({ customDividers: updatedCustom });
+
+    if (get().currentDivider.id === id) {
+      get().setDivider(DEFAULT_DIVIDERS[0]);
+    }
+  },
+
   getAllDividers: () => [...DEFAULT_DIVIDERS, ...get().customDividers],
+}));
+
+type Backdrop = "dither" | "galaxy";
+
+interface BackdropState {
+  backdrop: Backdrop;
+  setBackdrop: (backdrop: Backdrop) => void;
+}
+
+export const useBackdropStore = create<BackdropState>(set => ({
+  backdrop: (localStorage.getItem("backdrop") as Backdrop) || "dither",
+  setBackdrop: backdrop => {
+    localStorage.setItem("backdrop", backdrop);
+    set({ backdrop });
+  },
 }));
