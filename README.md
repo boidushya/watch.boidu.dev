@@ -1,6 +1,8 @@
 # watch.boidu.dev
 
-A beautifully crafted, opinionated standby clock.
+![Banner](public/banner.png)
+
+<p align="center">A beautifully crafted, opinionated standby clock.</p>
 
 ## Demo
 
