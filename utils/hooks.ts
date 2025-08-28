@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 // -- Types --
 export type Location = {
@@ -36,11 +36,11 @@ export const useClock = () => {
 };
 
 export const useLocation = () => {
-  const fetchLocation = async () => {
+  const fetchLocation = useCallback(async () => {
     const res = await fetch("https://ipapi.co/json/");
     const data = await res.json();
     return { state: data.region_code, country: data.country } as Location;
-  };
+  }, []);
 
   const {
     data: location,
@@ -49,20 +49,28 @@ export const useLocation = () => {
   } = useQuery({
     queryKey: ["location"],
     queryFn: fetchLocation,
+    staleTime: 1000 * 60 * 60,
+    gcTime: 1000 * 60 * 60 * 24,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
-  return { location, loading, error: error?.message || null };
+  return useMemo(() => ({
+    location,
+    loading,
+    error: error?.message || null
+  }), [location, loading, error]);
 };
 
 export const useWeather = () => {
-  const fetchWeather = async () => {
+  const fetchWeather = useCallback(async () => {
     const res = await fetch("https://wttr.in/?format=j1");
     const data = await res.json();
     return {
       temperature: data.current_condition[0].temp_C,
       condition: data.current_condition[0].weatherDesc[0].value,
     } as Weather;
-  };
+  }, []);
 
   const {
     data: weather,
@@ -71,32 +79,40 @@ export const useWeather = () => {
   } = useQuery({
     queryKey: ["weather"],
     queryFn: fetchWeather,
+    staleTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 30,
+    refetchOnWindowFocus: false,
+    refetchInterval: 1000 * 60 * 15,
   });
 
-  return { weather, loading, error: error?.message || null };
+  return useMemo(() => ({
+    weather,
+    loading,
+    error: error?.message || null
+  }), [weather, loading, error]);
 };
 
 export const useBreakpoint = () => {
   const [breakpoint, setBreakpoint] = useState("md");
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setBreakpoint("lg");
-      } else if (window.innerWidth >= 768) {
-        setBreakpoint("md");
-      } else {
-        setBreakpoint("sm");
-      }
-    };
+  const handleResize = useCallback(() => {
+    if (window.innerWidth >= 1024) {
+      setBreakpoint("lg");
+    } else if (window.innerWidth >= 768) {
+      setBreakpoint("md");
+    } else {
+      setBreakpoint("sm");
+    }
+  }, []);
 
+  useEffect(() => {
     window.addEventListener("resize", handleResize);
     handleResize();
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [handleResize]);
 
   return breakpoint;
 };

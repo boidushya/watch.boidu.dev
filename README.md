@@ -56,12 +56,13 @@ The project features a centralized theme system that allows easy customization:
 ## Tech Stack
 
 - **React** - UI library
-- **TypeScript** - Type safety
 - **Vite** - Build tool
-- **Tailwind CSS** - Styling
-- **Motion** - Animations
-- **TanStack Query** - Data fetching
-- **Number Flow** - Animated numbers
+- [**Motion**](https://motion.dev) - Animations
+- [**Number Flow**](https://number-flow.barvian.me/) - Animated numbers
+- [**Tailwind CSS**](https://tailwindcss.com) - Styling
+- [**Paper Shaders**](https://github.com/paper-design/shaders) - Shaders
+- [**TanStack Query**](https://tanstack.com/query/latest) - Data fetching
+- [**pqoqubbw/icons**](https://icons.pqoqubbw.dev/?q=clock) - Animated icons
 
 ## Deployment
 

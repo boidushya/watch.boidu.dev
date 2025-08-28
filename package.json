@@ -1,6 +1,6 @@
 {
   "name": "watch.boidu.dev",
-  "description": "An opinionated beautiful standby clock",
+  "description": "A beautifully crafted, opinionated standby clock.",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@number-flow/react": "^0.5.10",
+    "@paper-design/shaders-react": "^0.0.46",
     "@tailwindcss/vite": "^4.1.12",
     "@tanstack/react-query": "^5.85.5",
     "clsx": "^2.1.1",

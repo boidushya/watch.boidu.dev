@@ -1,57 +1,20 @@
 "use client";
 
-import type { Transition, Variants } from "motion/react";
 import { motion, useAnimation } from "motion/react";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 import { cn } from "@/utils/helpers";
 
-export interface ClockIconHandle {
+export interface SettingsGearIconHandle {
   startAnimation: () => void;
   stopAnimation: () => void;
 }
 
-interface ClockIconProps extends HTMLAttributes<HTMLDivElement> {
+interface SettingsGearIconProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
 }
 
-const handTransition: Transition = {
-  duration: 0.6,
-  ease: [0.4, 0, 0.2, 1],
-};
-
-const handVariants: Variants = {
-  normal: {
-    rotate: 0,
-    originX: "0%",
-    originY: "100%",
-  },
-  animate: {
-    rotate: 360,
-    originX: "0%",
-    originY: "100%",
-  },
-};
-
-const minuteHandTransition: Transition = {
-  duration: 0.5,
-  ease: "easeInOut",
-};
-
-const minuteHandVariants: Variants = {
-  normal: {
-    rotate: 0,
-    originX: "0%",
-    originY: "100%",
-  },
-  animate: {
-    rotate: 45,
-    originX: "0%",
-    originY: "100%",
-  },
-};
-
-const ClockIcon = forwardRef<ClockIconHandle, ClockIconProps>(
+const SettingsGearIcon = forwardRef<SettingsGearIconHandle, SettingsGearIconProps>(
   ({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
     const controls = useAnimation();
     const isControlledRef = useRef(false);
@@ -89,7 +52,7 @@ const ClockIcon = forwardRef<ClockIconHandle, ClockIconProps>(
 
     return (
       <div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
-        <svg
+        <motion.svg
           xmlns="http://www.w3.org/2000/svg"
           width={size}
           height={size}
@@ -99,34 +62,25 @@ const ClockIcon = forwardRef<ClockIconHandle, ClockIconProps>(
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
+          transition={{ type: "spring", stiffness: 50, damping: 10 }}
+          variants={{
+            normal: {
+              rotate: 0,
+            },
+            animate: {
+              rotate: 180,
+            },
+          }}
+          animate={controls}
         >
-          <circle cx="12" cy="12" r="10" />
-          <motion.line
-            x1="12"
-            y1="12"
-            x2="12"
-            y2="6"
-            variants={handVariants}
-            animate={controls}
-            initial="normal"
-            transition={handTransition}
-          />
-          <motion.line
-            x1="12"
-            y1="12"
-            x2="16"
-            y2="12"
-            variants={minuteHandVariants}
-            animate={controls}
-            initial="normal"
-            transition={minuteHandTransition}
-          />
-        </svg>
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+          <circle cx="12" cy="12" r="3" />
+        </motion.svg>
       </div>
     );
   }
 );
 
-ClockIcon.displayName = "ClockIcon";
+SettingsGearIcon.displayName = "SettingsGearIcon";
 
-export { ClockIcon };
+export { SettingsGearIcon };
