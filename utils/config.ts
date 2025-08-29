@@ -10,6 +10,7 @@ import SmokeBackdrop from "@/components/backdrops/smoke";
 import SwirlBackdrop from "@/components/backdrops/swirl";
 import TruchetBackdrop from "@/components/backdrops/truchet";
 
+// -- Types --
 export interface FontConfig {
   name: string;
   displayName: string;
@@ -22,6 +23,7 @@ export interface BackdropConfig {
   component: ComponentType;
 }
 
+// -- Constants --
 export const FONT_CONFIGS: FontConfig[] = [
   { name: "Jetbrains Mono", displayName: "JetBrains Mono", twClass: "font-jb-mono" },
   { name: "Inter Display", displayName: "Inter Display", twClass: "font-inter" },
@@ -44,6 +46,7 @@ export const BACKDROP_CONFIGS: BackdropConfig[] = [
   { id: "smoke", name: "Smoke", component: SmokeBackdrop },
 ];
 
+// -- Helpers --
 export function getBackdropComponent(backdropId: BackdropId): ComponentType {
   const config = BACKDROP_CONFIGS.find(b => b.id === backdropId);
   return config?.component || BACKDROP_CONFIGS[0].component;

@@ -13,6 +13,8 @@ function BlurBackdrop() {
     if (!ctx) return;
 
     let time = 0;
+    let animationId: number;
+    let frameCount = 0;
     const scale = 3;
 
     const resizeCanvas = () => {
@@ -63,19 +65,27 @@ function BlurBackdrop() {
     };
 
     const animate = () => {
-      time += 0.05;
-      generatePlasma();
-      requestAnimationFrame(animate);
+      frameCount++;
+      if (frameCount % 3 === 0) {
+        time += 0.05;
+        generatePlasma();
+      }
+      animationId = requestAnimationFrame(animate);
     };
 
     resizeCanvas();
     animate();
 
     window.addEventListener("resize", resizeCanvas);
-    return () => window.removeEventListener("resize", resizeCanvas);
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
   }, [theme]);
 
-  return <canvas ref={canvasRef} className={"fixed inset-0 pointer-events-none z-10"} />;
+  return <canvas ref={canvasRef} className="h-full w-full absolute" />;
 }
 
 export default BlurBackdrop;

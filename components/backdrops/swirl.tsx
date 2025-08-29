@@ -19,7 +19,7 @@ function SwirlBackdrop() {
 
   return (
     <Swirl
-      className="h-full w-full fixed inset-0 pointer-events-none z-10"
+      className="h-full w-full absolute"
       colorBack={theme === "dark" ? "hsla(0, 0%, 0%,1)" : "hsla(0, 0%, 100%,1)"}
       bandCount={15}
       twist={1}

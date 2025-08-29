@@ -15,9 +15,10 @@ function Clock() {
   const offset = useMemo(() => getOffset(breakpoint), [breakpoint]);
 
   const { getTwVariant } = useFontStore();
-  const { currentDivider } = useDividerStore();
+  const { getActiveDivider } = useDividerStore();
 
   const twVariant = getTwVariant();
+  const currentDivider = getActiveDivider();
 
   const renderDivider = useMemo(() => {
     if (currentDivider.type === "symbol") {

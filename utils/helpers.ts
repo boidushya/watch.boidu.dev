@@ -2,8 +2,10 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type { Location } from "./hooks";
 
+// -- Constants --
 const MAX_LENGTH = 30;
 
+// -- Helpers --
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

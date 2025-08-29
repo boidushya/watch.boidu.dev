@@ -55,11 +55,14 @@ export const useLocation = () => {
     refetchOnMount: false,
   });
 
-  return useMemo(() => ({
-    location,
-    loading,
-    error: error?.message || null
-  }), [location, loading, error]);
+  return useMemo(
+    () => ({
+      location,
+      loading,
+      error: error?.message || null,
+    }),
+    [location, loading, error]
+  );
 };
 
 export const useWeather = () => {
@@ -85,33 +88,33 @@ export const useWeather = () => {
     refetchInterval: 1000 * 60 * 15,
   });
 
-  return useMemo(() => ({
-    weather,
-    loading,
-    error: error?.message || null
-  }), [weather, loading, error]);
+  return useMemo(
+    () => ({
+      weather,
+      loading,
+      error: error?.message || null,
+    }),
+    [weather, loading, error]
+  );
 };
 
 export const useBreakpoint = () => {
-  const [breakpoint, setBreakpoint] = useState("md");
+  const [breakpoint, setBreakpoint] = useState(() => {
+    const width = window.innerWidth;
+    if (width >= 1024) return "lg";
+    if (width >= 768) return "md";
+    return "sm";
+  });
 
   const handleResize = useCallback(() => {
-    if (window.innerWidth >= 1024) {
-      setBreakpoint("lg");
-    } else if (window.innerWidth >= 768) {
-      setBreakpoint("md");
-    } else {
-      setBreakpoint("sm");
-    }
+    const width = window.innerWidth;
+    const newBreakpoint = width >= 1024 ? "lg" : width >= 768 ? "md" : "sm";
+    setBreakpoint(prev => (prev !== newBreakpoint ? newBreakpoint : prev));
   }, []);
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    handleResize();
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
   }, [handleResize]);
 
   return breakpoint;

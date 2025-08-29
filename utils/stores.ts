@@ -1,8 +1,32 @@
 import { create } from "zustand";
-import { FONT_CONFIGS, type FontName, type BackdropId } from "./config";
+import { type BackdropId, FONT_CONFIGS, type FontName } from "./config";
 
+// -- Types --
 type Page = "main" | "typography" | "dividers" | "delete-dividers" | "backdrops";
+type Font = FontName;
+type DividerType = "symbol" | "custom";
+type Backdrop = BackdropId;
 
+interface BackdropState {
+  backdrop: Backdrop;
+  previewBackdrop: Backdrop | null;
+  setBackdrop: (backdrop: Backdrop) => void;
+  setPreviewBackdrop: (backdrop: Backdrop | null) => void;
+}
+
+interface DividerOption {
+  id: string;
+  label: string;
+  type: DividerType;
+  content: string;
+}
+interface FontState {
+  font: Font;
+  previewFont: Font | null;
+  setFont: (font: Font) => void;
+  setPreviewFont: (font: Font | null) => void;
+  getTwVariant: () => string;
+}
 interface CommandMenuState {
   open: boolean;
   page: Page;
@@ -13,6 +37,30 @@ interface CommandMenuState {
   goBack: () => void;
 }
 
+interface DividerState {
+  currentDivider: DividerOption;
+  customDividers: DividerOption[];
+  setDivider: (divider: DividerOption) => void;
+  addCustomDivider: (label: string, svgDataUrl: string) => void;
+  removeCustomDivider: (id: string) => void;
+  getAllDividers: () => DividerOption[];
+  getActiveDivider: () => DividerOption;
+}
+
+interface ThemeState {
+  theme: "light" | "dark";
+  toggleTheme: () => void;
+}
+
+// -- Constants --
+const DEFAULT_DIVIDERS: DividerOption[] = [
+  { id: "cross", label: "Cross", type: "symbol", content: "⨯" },
+  { id: "colon", label: "Colon", type: "symbol", content: ":" },
+  { id: "dot", label: "Dot", type: "symbol", content: "·" },
+  { id: "pipe", label: "Pipe", type: "symbol", content: "|" },
+];
+
+// -- Stores --
 export const useCommandMenuStore = create<CommandMenuState>((set, get) => ({
   open: false,
   page: "main",
@@ -29,11 +77,6 @@ export const useCommandMenuStore = create<CommandMenuState>((set, get) => ({
     }
   },
 }));
-
-interface ThemeState {
-  theme: "light" | "dark";
-  toggleTheme: () => void;
-}
 
 export const useThemeStore = create<ThemeState>((set, get) => {
   const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -52,51 +95,23 @@ export const useThemeStore = create<ThemeState>((set, get) => {
   };
 });
 
-type Font = FontName;
-
-interface FontState {
-  font: Font;
-  setFont: (font: Font) => void;
-  getTwVariant: () => string;
-}
-
 export const useFontStore = create<FontState>((set, get) => ({
   font: (localStorage.getItem("font") as Font) || "Jetbrains Mono",
+  previewFont: null,
   setFont: font => {
     localStorage.setItem("font", font);
-    set({ font });
+    set({ font, previewFont: null });
+  },
+  setPreviewFont: previewFont => {
+    set({ previewFont });
   },
   getTwVariant: () => {
-    const font = get().font;
-    const config = FONT_CONFIGS.find(f => f.name === font);
-    return config?.twClass || "";
+    const { font, previewFont } = get();
+    const activeFont = previewFont || font;
+    const config = FONT_CONFIGS.find(f => f.name === activeFont);
+    return config?.twClass || FONT_CONFIGS[0].twClass;
   },
 }));
-
-type DividerType = "symbol" | "custom";
-
-interface DividerOption {
-  id: string;
-  label: string;
-  type: DividerType;
-  content: string;
-}
-
-const DEFAULT_DIVIDERS: DividerOption[] = [
-  { id: "cross", label: "Cross", type: "symbol", content: "⨯" },
-  { id: "colon", label: "Colon", type: "symbol", content: ":" },
-  { id: "dot", label: "Dot", type: "symbol", content: "·" },
-  { id: "pipe", label: "Pipe", type: "symbol", content: "|" },
-];
-
-interface DividerState {
-  currentDivider: DividerOption;
-  customDividers: DividerOption[];
-  setDivider: (divider: DividerOption) => void;
-  addCustomDivider: (label: string, svgDataUrl: string) => void;
-  removeCustomDivider: (id: string) => void;
-  getAllDividers: () => DividerOption[];
-}
 
 export const useDividerStore = create<DividerState>((set, get) => ({
   currentDivider: (() => {
@@ -109,7 +124,6 @@ export const useDividerStore = create<DividerState>((set, get) => ({
     localStorage.setItem("currentDivider", JSON.stringify(divider));
     set({ currentDivider: divider });
   },
-
   addCustomDivider: (label, svgDataUrl) => {
     const newDivider: DividerOption = {
       id: `custom-${Date.now()}`,
@@ -135,19 +149,21 @@ export const useDividerStore = create<DividerState>((set, get) => ({
   },
 
   getAllDividers: () => [...DEFAULT_DIVIDERS, ...get().customDividers],
+
+  getActiveDivider: () => {
+    const { currentDivider } = get();
+    return currentDivider;
+  },
 }));
 
-type Backdrop = BackdropId;
-
-interface BackdropState {
-  backdrop: Backdrop;
-  setBackdrop: (backdrop: Backdrop) => void;
-}
-
-export const useBackdropStore = create<BackdropState>((set) => ({
+export const useBackdropStore = create<BackdropState>(set => ({
   backdrop: (localStorage.getItem("backdrop") as Backdrop) || "dither",
+  previewBackdrop: null,
   setBackdrop: backdrop => {
     localStorage.setItem("backdrop", backdrop);
-    set({ backdrop });
+    set({ backdrop, previewBackdrop: null });
+  },
+  setPreviewBackdrop: previewBackdrop => {
+    set({ previewBackdrop });
   },
 }));

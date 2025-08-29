@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { useCommandMenuStore } from "@/utils/stores";
+import { useBackdropStore, useCommandMenuStore, useFontStore } from "@/utils/stores";
+import { useBreakpoint } from "../utils/hooks";
 import { Actions } from "./cmdk/actions";
 import { BackdropsPage } from "./cmdk/backdrops";
 import { DeleteDividersPage, DividersPage } from "./cmdk/dividers";
@@ -8,6 +9,10 @@ import { TypographyPage } from "./cmdk/typography";
 
 function CommandMenu() {
   const { open, setOpen, toggle, page, goBack } = useCommandMenuStore();
+  const { setPreviewBackdrop } = useBackdropStore();
+  const { setPreviewFont } = useFontStore();
+
+  const breakpoint = useBreakpoint();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -35,13 +40,19 @@ function CommandMenu() {
   useEffect(() => {
     if (!open) {
       goBack();
+      setPreviewBackdrop(null);
+      setPreviewFont(null);
     }
-  }, [open, goBack]);
+  }, [open, goBack, setPreviewBackdrop, setPreviewFont]);
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
-      <CommandInput />
-      <hr className="border-zinc-200 dark:border-zinc-800" />
+      {breakpoint !== "sm" && (
+        <>
+          <CommandInput />
+          <hr className="border-zinc-200 dark:border-zinc-800" />
+        </>
+      )}
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
 

@@ -9,7 +9,7 @@ function MeshBackdrop() {
 
   return (
     <MeshGradient
-      className="h-full w-full fixed inset-0 pointer-events-none z-10"
+      className="h-full w-full absolute"
       distortion={1}
       swirl={0.5}
       offsetX={0}

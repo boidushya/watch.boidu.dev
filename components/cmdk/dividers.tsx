@@ -20,6 +20,7 @@ export function DividersPage() {
     setOpen(false);
   };
 
+
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };

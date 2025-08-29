@@ -14,6 +14,7 @@ function DitheringBackdrop() {
 
     let time = 0;
     let frameCount = 0;
+    let animationId: number;
     const scale = 2.5;
 
     const resizeCanvas = () => {
@@ -57,7 +58,7 @@ function DitheringBackdrop() {
           grayscale = Math.pow(grayscale, 1.5);
 
           const threshold = bayerMatrix[y % 4][x % 4] / 16;
-          const value = grayscale > threshold ? (theme === "dark" ? 255 : 0) : (theme === "dark" ? 0 : 255);
+          const value = grayscale > threshold ? (theme === "dark" ? 255 : 0) : theme === "dark" ? 0 : 255;
           const alpha = value === (theme === "dark" ? 255 : 0) ? 15 : 8;
 
           data[i] = value;
@@ -72,21 +73,26 @@ function DitheringBackdrop() {
 
     const animate = () => {
       frameCount++;
-      if (frameCount % 6 === 0) {
+      if (frameCount % 8 === 0) {
         time++;
         generateDithering();
       }
-      requestAnimationFrame(animate);
+      animationId = requestAnimationFrame(animate);
     };
 
     resizeCanvas();
     animate();
 
     window.addEventListener("resize", resizeCanvas);
-    return () => window.removeEventListener("resize", resizeCanvas);
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
   }, [theme]);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-10" />;
+  return <canvas ref={canvasRef} className="h-full w-full absolute" />;
 }
 
 export default DitheringBackdrop;

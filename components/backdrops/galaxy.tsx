@@ -73,11 +73,13 @@ function GalaxyBackdrop() {
       context.stroke();
     };
 
+    let animationId: number;
+
     const step = () => {
       time += velocity;
       clear();
       render();
-      requestAnimationFrame(step);
+      animationId = requestAnimationFrame(step);
     };
 
     resize();
@@ -86,10 +88,13 @@ function GalaxyBackdrop() {
     window.addEventListener("resize", resize);
     return () => {
       window.removeEventListener("resize", resize);
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
     };
   }, [theme]);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-10" />;
+  return <canvas ref={canvasRef} className="h-full w-full absolute" />;
 }
 
 export default GalaxyBackdrop;

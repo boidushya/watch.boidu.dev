@@ -5,7 +5,7 @@ function SmokeBackdrop() {
   const { theme } = useThemeStore();
   return (
     <SmokeRing
-      className="h-full w-full fixed inset-0 pointer-events-none z-10"
+      className="h-full w-full absolute"
       colorBack={theme === "dark" ? "hsl(0, 0%, 90%)" : "hsl(0, 0%, 40%)"}
       noiseScale={5}
       noiseIterations={8}

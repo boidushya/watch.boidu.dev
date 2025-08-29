@@ -3,7 +3,7 @@ import { LiquidMetal } from "@paper-design/shaders-react";
 function LiquidBackdrop() {
   return (
     <LiquidMetal
-      className="h-full w-full fixed inset-0 pointer-events-none z-10 opacity-50"
+      className="h-full w-full absolute opacity-50"
       colorBack="hsla(0, 0%, 100%, 0)"
       colorTint="hsl(0, 0%, 100%)"
       repetition={3}

@@ -2,6 +2,7 @@ import { Command } from "cmdk";
 import type { ReactNode } from "react";
 import { cn } from "@/utils/helpers";
 
+// -- Types --
 interface CommandDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -9,6 +10,39 @@ interface CommandDialogProps {
   className?: string;
 }
 
+interface CommandInputProps {
+  placeholder?: string;
+  className?: string;
+}
+
+interface CommandListProps {
+  children: ReactNode;
+  className?: string;
+}
+
+interface CommandEmptyProps {
+  children: ReactNode;
+  className?: string;
+}
+
+interface CommandGroupProps {
+  heading: string;
+  children: ReactNode;
+  className?: string;
+}
+
+interface CommandItemProps {
+  children: ReactNode;
+  onSelect?: () => void;
+  className?: string;
+  value?: string;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+}
+
+// -- Components --
 export function CommandDialog({ open, onOpenChange, children, className }: CommandDialogProps) {
   return (
     <Command.Dialog
@@ -28,11 +62,6 @@ export function CommandDialog({ open, onOpenChange, children, className }: Comma
   );
 }
 
-interface CommandInputProps {
-  placeholder?: string;
-  className?: string;
-}
-
 export function CommandInput({ placeholder = "Type a command or search...", className }: CommandInputProps) {
   return (
     <Command.Input
@@ -45,18 +74,8 @@ export function CommandInput({ placeholder = "Type a command or search...", clas
   );
 }
 
-interface CommandListProps {
-  children: ReactNode;
-  className?: string;
-}
-
 export function CommandList({ children, className }: CommandListProps) {
   return <Command.List className={cn("max-h-80 overflow-y-auto p-2", className)}>{children}</Command.List>;
-}
-
-interface CommandEmptyProps {
-  children: ReactNode;
-  className?: string;
 }
 
 export function CommandEmpty({ children, className }: CommandEmptyProps) {
@@ -65,12 +84,6 @@ export function CommandEmpty({ children, className }: CommandEmptyProps) {
       {children}
     </Command.Empty>
   );
-}
-
-interface CommandGroupProps {
-  heading: string;
-  children: ReactNode;
-  className?: string;
 }
 
 export function CommandGroup({ heading, children, className }: CommandGroupProps) {
@@ -87,18 +100,24 @@ export function CommandGroup({ heading, children, className }: CommandGroupProps
   );
 }
 
-interface CommandItemProps {
-  children: ReactNode;
-  onSelect?: () => void;
-  className?: string;
-  value?: string;
-}
-
-export function CommandItem({ children, onSelect, className, value }: CommandItemProps) {
+export function CommandItem({
+  children,
+  onSelect,
+  className,
+  value,
+  onMouseEnter,
+  onMouseLeave,
+  onFocus,
+  onBlur,
+}: CommandItemProps) {
   return (
     <Command.Item
       value={value}
       onSelect={onSelect}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onFocus={onFocus}
+      onBlur={onBlur}
       className={cn(
         "dark:text-zinc-400 text-zinc-600 relative flex cursor-pointer select-none items-center rounded-md px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-50 hover:text-zinc-900 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-50 data-[selected='true']:bg-zinc-100 data-[selected='true']:text-zinc-900 dark:data-[selected='true']:bg-zinc-800 dark:data-[selected='true']:text-zinc-50",
         className
